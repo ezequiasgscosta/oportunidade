@@ -30,6 +30,7 @@ type Track = {
   title: string;
   artist: string;
   category: string;
+  location: string;
   audio_path: string;
   status: TrackStatus;
   submitted_by: string | null;
@@ -66,6 +67,7 @@ export default function Home() {
   const [title, setTitle] = useState("");
   const [artist, setArtist] = useState("");
   const [newCategory, setNewCategory] = useState(categories[0]);
+  const [location, setLocation] = useState("");
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [refreshIndex, setRefreshIndex] = useState(0);
@@ -157,7 +159,9 @@ export default function Home() {
     const term = search.trim().toLocaleLowerCase("pt-BR");
     const matchesSearch =
       !term ||
-      `${track.title} ${track.artist} ${track.category}`.toLocaleLowerCase("pt-BR").includes(term);
+      `${track.title} ${track.artist} ${track.category} ${track.location || "Desconhecido"}`
+        .toLocaleLowerCase("pt-BR")
+        .includes(term);
     return matchesCategory && matchesSearch;
   });
   const ownTracks = tracks.filter((track) => track.submitted_by === user?.id);
@@ -218,6 +222,7 @@ export default function Home() {
       title: title.trim(),
       artist: artist.trim(),
       category: newCategory,
+      location: location.trim() || "Desconhecido",
       audio_path: audioPath,
       status: "pending",
       submitted_by: user.id,
@@ -233,6 +238,7 @@ export default function Home() {
     setTitle("");
     setArtist("");
     setNewCategory(categories[0]);
+    setLocation("");
     setAudioFile(null);
     setModal(null);
     setFeedError("");
@@ -299,7 +305,7 @@ export default function Home() {
                 <span className="sr-only">Pesquisar músicas</span>
                 <input
                   type="search"
-                  placeholder="Buscar música, artista ou categoria"
+                  placeholder="Buscar música, categoria, cantor ou local"
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
                 />
@@ -338,7 +344,7 @@ export default function Home() {
                       </div>
                       <div className="track-meta">
                         <h3>{track.title}</h3>
-                        <p>{track.artist}</p>
+                        <p>{track.artist} <span className="track-location">· {track.location || "Desconhecido"}</span></p>
                       </div>
                       <span className="track-category">{track.category}</span>
                       <audio controls preload="none" src={audioUrls[track.id]} aria-label={`Ouvir ${track.title}, de ${track.artist}`} />
@@ -429,6 +435,7 @@ export default function Home() {
                   <label>Nome da música<input required maxLength={120} value={title} onChange={(event) => setTitle(event.target.value)} placeholder="Ex.: Depois da Chuva" /></label>
                   <label>Nome do artista<input required maxLength={120} value={artist} onChange={(event) => setArtist(event.target.value)} placeholder="Seu nome artístico" /></label>
                   <label>Categoria<select value={newCategory} onChange={(event) => setNewCategory(event.target.value)}>{categories.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
+                  <label>Local onde foi cantado<input maxLength={120} value={location} onChange={(event) => setLocation(event.target.value)} placeholder="Ex.: São Carlos (opcional)" /><small>Se não souber, deixe em branco para salvar como “Desconhecido”.</small></label>
                   <label className="file-field">
                     <span>Arquivo de áudio <small>MP3, WAV, OGG, M4A ou FLAC · até 50 MB</small></span>
                     <input type="file" accept="audio/mpeg,audio/mp3,audio/wav,audio/ogg,audio/mp4,audio/x-m4a,audio/flac,audio/aac,audio/webm" required onChange={(event) => setAudioFile(event.target.files?.[0] ?? null)} />

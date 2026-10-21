@@ -488,6 +488,8 @@ select:focus-visible {
   white-space: nowrap;
 }
 
+.track-location { color: #869188; }
+
 .track-category {
   justify-self: start;
   padding: 5px 8px;

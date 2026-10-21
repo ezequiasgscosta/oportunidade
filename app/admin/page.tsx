@@ -28,6 +28,7 @@ type Track = {
   title: string;
   artist: string;
   category: string;
+  location: string;
   audio_path: string;
   status: TrackStatus;
   created_at: string;
@@ -354,7 +355,7 @@ export default function AdminPage() {
               {visibleTracks.map((track) => (
                 <article className="admin-music-row" key={track.id}>
                   <div className="track-art art-4"><Music2 size={19} /></div>
-                  <div className="track-meta"><h3>{track.title}</h3><p>{track.artist} <span>/</span> {track.category}</p></div>
+                  <div className="track-meta"><h3>{track.title}</h3><p>{track.artist} <span>/</span> {track.category} <span>/</span> {track.location || "Desconhecido"}</p></div>
                   <audio controls preload="none" src={audioUrls[track.id]} aria-label={`Ouvir ${track.title}, de ${track.artist}`} />
                   <span className={`admin-track-status status-${track.status}`}>{statusLabel(track.status)}</span>
                   <div className="admin-row-actions">

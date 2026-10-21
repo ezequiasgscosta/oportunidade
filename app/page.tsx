@@ -20,6 +20,7 @@ import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
 import type { User } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
+import { useActiveVisitors } from "./components/active-visitors";
 import GoogleAd from "./components/google-ad";
 
 type TrackStatus = "pending" | "approved" | "rejected";
@@ -68,6 +69,7 @@ export default function Home() {
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [refreshIndex, setRefreshIndex] = useState(0);
+  const activeVisitors = useActiveVisitors();
   const isAdmin = adminUserId === user?.id;
   const feedLoading = loading || loadedForUser !== (user?.id ?? "anonymous");
 
@@ -286,7 +288,7 @@ export default function Home() {
           <div className="intro-stats" aria-label="Resumo do feed">
             <div className="stat-block"><strong>{approvedTracks.length.toString().padStart(2, "0")}</strong><span>no feed</span></div>
             <span className="stat-rule" />
-            <div className="stat-block"><strong>{(availableCategories.length - 1).toString().padStart(2, "0")}</strong><span>categorias</span></div>
+            <div className="stat-block"><strong>{activeVisitors ?? "—"}</strong><span>online</span></div>
           </div>
         </section>
 

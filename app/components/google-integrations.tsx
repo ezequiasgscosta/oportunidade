@@ -13,8 +13,6 @@ declare global {
 
 const analyticsId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID;
 const validAnalyticsId = analyticsId && /^G-[A-Z0-9]+$/i.test(analyticsId) ? analyticsId : null;
-const publisherId = process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_PUBLISHER_ID;
-const validPublisherId = publisherId && /^ca-pub-\d+$/.test(publisherId) ? publisherId : null;
 
 export default function GoogleIntegrations() {
   const pathname = usePathname();
@@ -36,13 +34,6 @@ export default function GoogleIntegrations() {
             strategy="afterInteractive"
           />
         </>
-      )}
-      {validPublisherId && (
-        <Script
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${validPublisherId}`}
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
       )}
     </>
   );

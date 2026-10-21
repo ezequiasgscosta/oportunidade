@@ -1,6 +1,6 @@
-## Onda
+## Canta Igreja
 
-Feed comunitário de música feito com Next.js e Supabase. O feed mostra faixas aprovadas; usuários autenticados podem enviar áudio para análise, e administradores podem aprovar, recusar ou excluir faixas.
+Feed comunitário de louvor feito com Next.js e Supabase. O feed reúne hinos da Harpa, hinos avulsos e covers; pessoas autenticadas podem enviar áudio para análise, e administradores moderam as faixas.
 
 ## Configuração
 
@@ -14,7 +14,11 @@ Feed comunitário de música feito com Next.js e Supabase. O feed mostra faixas 
 
 O painel administrativo fica em `/admin` e reúne estatísticas, moderação das músicas e gerenciamento dos administradores. Só contas com o papel `admin` concedido no banco podem acessá-lo.
 
-Os áudios ficam no bucket público `music-audio`; o upload exige autenticação e cada faixa começa como `pending`. A política RLS permite ao público ler somente faixas aprovadas, aos usuários consultar suas submissões e somente ao administrador moderar ou excluir faixas.
+Os áudios ficam no bucket privado `music-audio`; o upload exige autenticação e cada faixa começa como `pending`. URLs assinadas e políticas RLS permitem ouvir somente faixas aprovadas, próprias ou acessadas pelo admin.
+
+As páginas públicas `/sobre`, `/privacidade`, `/termos` e `/contato` explicam o projeto, as regras, o uso de cookies e os canais de atendimento. Configure `NEXT_PUBLIC_CONTACT_EMAIL` na Vercel para publicar o email de contato. O painel mostra uma estimativa de visitantes online via Supabase Realtime, usando um identificador aleatório local.
+
+Confirme que Realtime está habilitado no projeto Supabase para publicar a presença dos visitantes.
 
 ## Google Analytics e AdSense
 

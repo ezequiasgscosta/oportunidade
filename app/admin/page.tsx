@@ -19,6 +19,7 @@ import {
 import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
 import type { User } from "@supabase/supabase-js";
+import { useActiveVisitors } from "../components/active-visitors";
 import { createClient } from "@/lib/supabase/client";
 
 type TrackStatus = "pending" | "approved" | "rejected";
@@ -83,10 +84,15 @@ export default function AdminPage() {
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [savingAdmin, setSavingAdmin] = useState(false);
+  const activeVisitors = useActiveVisitors();
 
   const isAdmin = Boolean(user && roleState?.userId === user.id && roleState.isAdmin);
   const checkingRole = Boolean(user) && roleState?.userId !== user?.id;
   const visibleTracks = tracks.filter((track) => filter === "all" || track.status === filter);
+  const profileName = user?.user_metadata?.display_name;
+  const adminDisplayName = typeof profileName === "string" && profileName.trim()
+    ? profileName.trim()
+    : user?.email;
 
   useEffect(() => {
     let active = true;
@@ -296,11 +302,11 @@ export default function AdminPage() {
       <header className="topbar">
         <Link className="brand" href="/" aria-label="Onda, voltar ao feed">
           <span className="brand-mark"><Music2 size={20} /></span>
-          <span className="brand-word">onda<span>.</span></span>
+          <span className="brand-word">Canta <span>Igreja</span></span>
           <span className="brand-caption">ADMINISTRAÇÃO</span>
         </Link>
         <nav className="top-actions" aria-label="Navegação administrativa">
-          <span className="admin-session"><ShieldCheck size={15} /> {user.email}</span>
+          <span className="admin-session"><ShieldCheck size={15} /> {adminDisplayName}</span>
           <button className="quiet-button" onClick={() => void handleLogout()} title="Sair" aria-label="Sair"><LogOut size={17} /></button>
         </nav>
       </header>
@@ -325,7 +331,9 @@ export default function AdminPage() {
           <article className="admin-stat-card stat-pending"><span className="admin-stat-icon"><Clock3 size={18} /></span><span className="admin-stat-label">PENDENTES</span><strong>{stats.pending_tracks}</strong><small>aguardando revisão</small></article>
           <article className="admin-stat-card stat-approved"><span className="admin-stat-icon"><BadgeCheck size={18} /></span><span className="admin-stat-label">APROVADAS</span><strong>{stats.approved_tracks}</strong><small>publicadas no feed</small></article>
           <article className="admin-stat-card stat-rejected"><span className="admin-stat-icon"><X size={18} /></span><span className="admin-stat-label">RECUSADAS</span><strong>{stats.rejected_tracks}</strong><small>não publicadas</small></article>
+          <article className="admin-stat-card stat-online"><span className="admin-stat-icon"><UsersRound size={18} /></span><span className="admin-stat-label">ONLINE AGORA</span><strong>{activeVisitors ?? "—"}</strong><small>visitantes conectados</small></article>
         </section>
+        <p className="online-count-note">Estimativa em tempo real: várias abas do mesmo navegador contam como um visitante.</p>
 
         <section className="admin-panel-section" aria-labelledby="moderation-title">
           <div className="admin-section-heading">
@@ -385,8 +393,14 @@ export default function AdminPage() {
         </section>
 
         <footer className="page-footer">
-          <Link className="footer-brand" href="/"><Music2 size={15} /> onda<span>.</span></Link>
+          <Link className="footer-brand" href="/"><Music2 size={15} /> Canta Igreja</Link>
           <span>Administração da comunidade</span>
+          <nav className="legal-footer-links" aria-label="Informações do site">
+            <Link href="/sobre">Sobre</Link>
+            <Link href="/privacidade">Privacidade</Link>
+            <Link href="/termos">Termos</Link>
+            <Link href="/contato">Contato</Link>
+          </nav>
           <span className="footer-live"><span className="live-dot" /> SESSÃO PROTEGIDA</span>
         </footer>
       </div>

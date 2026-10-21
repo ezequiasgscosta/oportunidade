@@ -35,7 +35,7 @@ type Track = {
   created_at: string;
 };
 
-const categories = ["MPB", "Pop", "Rock", "Rap", "Eletrônica", "Jazz", "Outro"];
+const categories = ["hino da harpa", "hino avulso", "cover"];
 const audioBucket = "music-audio";
 
 function getStatusLabel(status: TrackStatus) {
@@ -57,6 +57,7 @@ export default function Home() {
   const [category, setCategory] = useState("Todas");
   const [modal, setModal] = useState<"auth" | "submit" | null>(null);
   const [authMode, setAuthMode] = useState<"login" | "signup">("login");
+  const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [authMessage, setAuthMessage] = useState("");
@@ -158,7 +159,11 @@ export default function Home() {
     return matchesCategory && matchesSearch;
   });
   const ownTracks = tracks.filter((track) => track.submitted_by === user?.id);
-  const availableCategories = ["Todas", ...new Set(approvedTracks.map((track) => track.category))];
+  const availableCategories = ["Todas", ...categories.filter((item) => approvedTracks.some((track) => track.category === item))];
+  const profileName = user?.user_metadata?.display_name;
+  const userLabel = typeof profileName === "string" && profileName.trim()
+    ? profileName.trim()
+    : user?.email;
 
   async function handleAuth(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -172,7 +177,11 @@ export default function Home() {
       return;
     }
 
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { display_name: displayName.trim() } },
+    });
     if (error) {
       setAuthError("Não foi possível criar a conta. Confira os dados e tente novamente.");
     } else if (data.session) {
@@ -234,7 +243,7 @@ export default function Home() {
       <header className="topbar">
         <a className="brand" href="#feed" aria-label="Onda, início">
           <span className="brand-mark"><AudioLines size={21} strokeWidth={2.4} /></span>
-          <span className="brand-word">onda<span>.</span></span>
+          <span className="brand-word">Canta <span>Igreja</span></span>
           <span className="brand-caption">FEED DE MÚSICA</span>
         </a>
         <nav className="top-actions" aria-label="Navegação principal">
@@ -245,7 +254,7 @@ export default function Home() {
           )}
           {user ? (
             <>
-              <span className="user-email">{user.email}</span>
+              <span className="user-email">{userLabel}</span>
               <button className="quiet-button" onClick={handleSignOut} aria-label="Sair" title="Sair">
                 <LogOut size={17} />
               </button>
@@ -372,8 +381,14 @@ export default function Home() {
         </>
 
         <footer className="page-footer">
-          <a className="footer-brand" href="#feed"><AudioLines size={16} /> onda<span>.</span></a>
+          <a className="footer-brand" href="#feed"><AudioLines size={16} /> Canta Igreja</a>
           <span>Feito para quem vive de música.</span>
+          <nav className="legal-footer-links" aria-label="Informações do site">
+            <Link href="/sobre">Sobre</Link>
+            <Link href="/privacidade">Privacidade</Link>
+            <Link href="/termos">Termos</Link>
+            <Link href="/contato">Contato</Link>
+          </nav>
           <span className="footer-live"><span className="live-dot" /> COMUNIDADE ABERTA</span>
         </footer>
       </div>
@@ -393,6 +408,7 @@ export default function Home() {
                   <button role="tab" aria-selected={authMode === "signup"} className={authMode === "signup" ? "active" : ""} onClick={() => { setAuthMode("signup"); setAuthError(""); setAuthMessage(""); }}>Criar conta</button>
                 </div>
                 <form className="modal-form" onSubmit={(event) => void handleAuth(event)}>
+                  {authMode === "signup" && <label>Nome<input autoComplete="name" type="text" required maxLength={80} value={displayName} onChange={(event) => setDisplayName(event.target.value)} placeholder="Como podemos chamar você?" /></label>}
                   <label>Email<input autoComplete="email" type="email" required value={email} onChange={(event) => setEmail(event.target.value)} placeholder="voce@email.com" /></label>
                   <label>Senha<input autoComplete={authMode === "login" ? "current-password" : "new-password"} type="password" minLength={6} required value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Mínimo de 6 caracteres" /></label>
                   {authError && <p className="form-error" role="alert">{authError}</p>}

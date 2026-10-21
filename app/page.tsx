@@ -39,6 +39,7 @@ type Track = {
 
 const categories = ["hino da harpa", "hino avulso", "cover"];
 const audioBucket = "music-audio";
+const emailConfirmationUrl = "https://cantaigreja.vercel.app/";
 
 function getStatusLabel(status: TrackStatus) {
   if (status === "approved") return "No feed";
@@ -186,7 +187,10 @@ export default function Home() {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { display_name: displayName.trim() } },
+      options: {
+        emailRedirectTo: emailConfirmationUrl,
+        data: { display_name: displayName.trim() },
+      },
     });
     if (error) {
       setAuthError("Não foi possível criar a conta. Confira os dados e tente novamente.");

@@ -3,8 +3,8 @@ import { Mail, MessageCircle } from "lucide-react";
 import LayoutInformativo from "../components/layout-informativo";
 
 export const metadata: Metadata = {
-  title: "Contato | Canta Igreja",
-  description: "Entre em contato com a equipe do Canta Igreja.",
+  title: "Contato | Tirando de Ouvido",
+  description: "Entre em contato com a equipe do Tirando de Ouvido.",
 };
 
 export default function ContactPage() {

@@ -1,4 +1,4 @@
-## Canta Igreja
+## Tirando de Ouvido
 
 Feed comunitário de louvor feito com Next.js e Supabase. O feed reúne hinos da Harpa, hinos avulsos e covers; pessoas autenticadas podem enviar áudio para análise, e administradores moderam as faixas.
 

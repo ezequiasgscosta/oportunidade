@@ -25,9 +25,9 @@ export default function LayoutInformativo({
   return (
     <div className="app-shell info-shell">
       <header className="topbar info-topbar">
-        <Link className="brand" href="/" aria-label="Canta Igreja, página inicial">
+        <Link className="brand" href="/" aria-label="Tirando de Ouvido, página inicial">
           <span className="brand-mark"><AudioLines size={21} strokeWidth={2.4} /></span>
-          <span className="brand-word">Canta <span>Igreja</span></span>
+          <span className="brand-word">Tirando de <span>Ouvido</span></span>
         </Link>
         <Link className="info-home-link" href="/"><ArrowLeft size={15} /> Voltar ao feed</Link>
       </header>
@@ -40,7 +40,7 @@ export default function LayoutInformativo({
       </main>
 
       <footer className="info-footer">
-        <Link className="footer-brand" href="/"><AudioLines size={15} /> Canta Igreja</Link>
+        <Link className="footer-brand" href="/"><AudioLines size={15} /> Tirando de Ouvido</Link>
         <nav aria-label="Informações do site">
           {linksInformativos.map((link) => <Link href={link.href} key={link.href}>{link.label}</Link>)}
         </nav>

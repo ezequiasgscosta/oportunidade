@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import LayoutInformativo from "../components/layout-informativo";
 
 export const metadata: Metadata = {
-  title: "Termos de uso | Canta Igreja",
-  description: "Condições de uso e envio de músicas ao Canta Igreja.",
+  title: "Termos de uso | Tirando de Ouvido",
+  description: "Condições de uso e envio de músicas ao Tirando de Ouvido.",
 };
 
 export default function TermsPage() {
@@ -11,16 +11,16 @@ export default function TermsPage() {
     <LayoutInformativo
       categoria="COMBINADOS DA COMUNIDADE"
       titulo="Termos de uso"
-      descricao="Ao navegar ou criar uma conta no Canta Igreja, você concorda com estas condições de uso."
+      descricao="Ao navegar ou criar uma conta no Tirando de Ouvido, você concorda com estas condições de uso."
     >
       <p className="info-updated">Última atualização: 21 de outubro de 2026</p>
       <section>
         <h2>Uso do site</h2>
-        <p>Use o Canta Igreja de forma legal, respeitosa e sem prejudicar outras pessoas ou a disponibilidade do serviço. Você é responsável por manter a segurança das credenciais da sua conta e pelas atividades realizadas nela.</p>
+        <p>Use o Tirando de Ouvido de forma legal, respeitosa e sem prejudicar outras pessoas ou a disponibilidade do serviço. Você é responsável por manter a segurança das credenciais da sua conta e pelas atividades realizadas nela.</p>
       </section>
       <section>
         <h2>Envio de músicas e direitos autorais</h2>
-        <p>Ao enviar uma gravação, você confirma que tem os direitos ou as autorizações necessárias para disponibilizar o áudio e as informações fornecidas. O envio concede ao Canta Igreja permissão não exclusiva para armazenar, analisar, reproduzir e disponibilizar a faixa dentro do serviço.</p>
+        <p>Ao enviar uma gravação, você confirma que tem os direitos ou as autorizações necessárias para disponibilizar o áudio e as informações fornecidas. O envio concede ao tirando de ouvido permissão não exclusiva para armazenar, analisar, reproduzir e disponibilizar a faixa dentro do serviço.</p>
         <p>O envio não transfere a propriedade da música. Não envie material que viole direitos autorais, direitos de imagem, privacidade ou outras leis. A equipe pode recusar ou remover conteúdo quando necessário.</p>
       </section>
       <section>

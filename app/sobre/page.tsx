@@ -3,8 +3,8 @@ import Link from "next/link";
 import LayoutInformativo from "../components/layout-informativo";
 
 export const metadata: Metadata = {
-  title: "Sobre | Canta Igreja",
-  description: "Conheça o Canta Igreja e a comunidade que compartilha louvores.",
+  title: "Sobre | Tirando de Ouvido",
+  description: "Conheça o Tirando de Ouvido e a comunidade que compartilha louvores.",
 };
 
 export default function AboutPage() {
@@ -12,7 +12,7 @@ export default function AboutPage() {
     <LayoutInformativo
       categoria="NOSSA COMUNIDADE"
       titulo="Louvores que aproximam."
-      descricao="Canta Igreja é um espaço para descobrir, ouvir e compartilhar música cristã com outras pessoas."
+      descricao="Tirando de Ouvido é um espaço para descobrir, ouvir e compartilhar música cristã com outras pessoas."
     >
       <section>
         <h2>Um lugar para compartilhar música</h2>

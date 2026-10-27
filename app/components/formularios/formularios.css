@@ -212,3 +212,107 @@
 .edit-track-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 3px; }
 .edit-track-actions .quiet-button { min-height: 44px; }
 .edit-track-actions .form-submit { min-width: 180px; margin-top: 0; }
+
+.fundo-envio-musica {
+  background: rgb(0 0 0 / 78%);
+}
+
+.envio-musica {
+  width: min(100%, 480px);
+  border-color: var(--border);
+  background: var(--background);
+  box-shadow: 0 18px 60px rgb(0 0 0 / 60%);
+}
+
+.envio-musica .modal-close {
+  color: var(--text-secondary);
+}
+
+.envio-musica .modal-close:hover {
+  background: var(--card);
+  color: var(--text);
+}
+
+.envio-musica .modal-symbol-lime {
+  background: rgb(250 133 28 / 12%);
+  color: var(--primary);
+}
+
+.envio-musica .modal-kicker,
+.envio-musica .modal-form > label {
+  color: var(--text);
+}
+
+.envio-musica .modal-kicker {
+  letter-spacing: 0.08em;
+}
+
+.envio-musica .modal-kicker span,
+.envio-musica .modal-copy,
+.envio-musica .file-field small,
+.envio-musica .secure-note {
+  color: var(--text-secondary);
+}
+
+.envio-musica .modal-form input:not([type="file"]),
+.envio-musica .modal-form select {
+  border-color: var(--border);
+  background: var(--background-secondary);
+  color: var(--text);
+}
+
+.envio-musica .modal-form input:not([type="file"]):focus,
+.envio-musica .modal-form select:focus {
+  border-color: var(--primary);
+  outline: 2px solid rgb(250 133 28 / 18%);
+  outline-offset: 1px;
+}
+
+.envio-musica .modal-form input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+.envio-musica .modal-form select option {
+  background: var(--background-secondary);
+  color: var(--text);
+}
+
+.envio-musica .file-picker {
+  border-color: var(--border);
+  background: var(--background-secondary);
+  color: var(--text-secondary);
+}
+
+.envio-musica .file-picker svg {
+  flex: 0 0 auto;
+  color: var(--primary);
+}
+
+.envio-musica .file-picker:hover {
+  border-color: var(--primary);
+  background: var(--card);
+  color: var(--text);
+}
+
+.envio-musica .form-submit {
+  background: var(--green);
+  color: #070a0b;
+}
+
+.envio-musica .form-submit:hover {
+  background: #0eb77e;
+}
+
+.envio-musica .form-submit:disabled {
+  background: var(--border);
+  color: var(--text-secondary);
+}
+
+.envio-musica .form-error {
+  color: #ff8875;
+}
+
+.envio-musica .secure-note svg {
+  color: var(--green);
+}

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import LayoutInformativo from "../components/layout-informativo";
 
 export const metadata: Metadata = {
-  title: "Política de Privacidade | Canta Igreja",
-  description: "Saiba como o Canta Igreja utiliza dados, cookies, analytics e anúncios.",
+  title: "Política de Privacidade | Tirando de Ouvido",
+  description: "Saiba como o Tirando de Ouvido utiliza dados, cookies, analytics e anúncios.",
 };
 
 export default function PrivacyPage() {
@@ -11,7 +11,7 @@ export default function PrivacyPage() {
     <LayoutInformativo
       categoria="SEUS DADOS"
       titulo="Política de privacidade"
-      descricao="Esta página explica quais informações são usadas para operar o Canta Igreja, incluindo cookies, analytics e publicidade."
+      descricao="Esta página explica quais informações são usadas para operar o Tirando de Ouvido, incluindo cookies, analytics e publicidade."
     >
       <p className="info-updated">Última atualização: 21 de outubro de 2026</p>
       <section>

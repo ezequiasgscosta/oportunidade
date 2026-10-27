@@ -393,8 +393,8 @@ export default function Home() {
       </div>
 
       {modal && (
-        <div className="modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setModal(null); }}>
-          <section className="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div className={`modal-backdrop${modal === "submit" ? " fundo-envio-musica" : ""}`} role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setModal(null); }}>
+          <section className={`modal-panel${modal === "submit" ? " envio-musica" : ""}`} role="dialog" aria-modal="true" aria-labelledby="modal-title">
             <button className="modal-close" onClick={() => setModal(null)} aria-label="Fechar"><X size={19} /></button>
             {modal === "auth" ? (
               <>

@@ -1,0 +1,279 @@
+
+/* TELA DE CARREGAMENTO */
+
+.tela-carregamento {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #000;
+  color: #fff;
+  padding: 20px;
+}
+
+.conteudo-carregamento {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: -30px;
+  animation: entrada-conteudo 1s ease-out both;
+}
+
+/* LOGO DA ORELHA */
+
+.desenho-orelha {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 22px;
+  overflow: visible;
+  filter: drop-shadow(0 0 10px #FA851C55);
+}
+
+.contorno-orelha {
+  stroke: #FA851C;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+  animation: desenhar-orelha 1.5s ease forwards;
+}
+
+.barra-equalizador {
+  stroke: #FA851C;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  animation: animar-equalizador 0.6s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+
+/* TÍTULO */
+
+.titulo-aplicativo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -1.5px;
+}
+
+.titulo-linha-branca {
+  color: #fff;
+  font-size: clamp(36px, 9vw, 52px);
+}
+
+.titulo-linha-laranja {
+  margin-top: 4px;
+  color: #FA851C;
+  font-size: clamp(48px, 12vw, 66px);
+  text-shadow: 0 0 25px #FA851C22;
+}
+
+/* FRASES COM EFEITO DE MÁQUINA DE ESCREVER */
+
+.frases-apresentacao {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.frase {
+  width: 0;
+  max-width: 90vw;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid #FA851C;
+  font-family: Arial, sans-serif;
+  font-size: clamp(14px, 4vw, 18px);
+  line-height: 1.5;
+  color: #eee;
+  opacity: 0;
+}
+
+/* PRIMEIRA FRASE */
+
+.frase-primeira {
+  animation:
+    aparecer-frase 0.01s linear 1.8s forwards,
+    escrever-primeira 1.5s steps(21, end) 1.8s forwards,
+    piscar-cursor 0.7s step-end 1.8s 5;
+}
+
+/* SEGUNDA FRASE */
+
+.frase-segunda {
+  animation:
+    aparecer-frase 0.01s linear 3.5s forwards,
+    escrever-segunda 2s steps(25, end) 3.5s forwards,
+    piscar-cursor 0.7s step-end 3.5s 6;
+}
+
+/* ONDA SONORA */
+
+.onda-sonora {
+  position: absolute;
+  bottom: 45px;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 100%;
+  height: 100px;
+  padding: 0 8px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
+}
+
+.onda-barra {
+  flex: 1;
+  max-width: 5px;
+  min-width: 2px;
+  border-radius: 10px;
+  background: #FA851C;
+  box-shadow: 0 0 8px #FA851C66;
+  transform-origin: center;
+  animation: pulsar-onda 0.8s ease-in-out infinite alternate;
+}
+
+/* ANIMAÇÕES */
+
+@keyframes entrada-conteudo {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes desenhar-orelha {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes animar-equalizador {
+  from {
+    transform: scaleY(0.55);
+    opacity: 0.6;
+  }
+
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+@keyframes aparecer-frase {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes escrever-primeira {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 21ch;
+  }
+}
+
+@keyframes escrever-segunda {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 25ch;
+  }
+}
+
+@keyframes piscar-cursor {
+  50% {
+    border-color: transparent;
+  }
+}
+
+@keyframes pulsar-onda {
+  from {
+    transform: scaleY(0.25);
+    opacity: 0.4;
+  }
+
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+/* CELULARES PEQUENOS */
+
+@media (max-height: 650px) {
+  .desenho-orelha {
+    width: 85px;
+    height: 85px;
+    margin-bottom: 12px;
+  }
+
+  .conteudo-carregamento {
+    margin-top: -20px;
+  }
+
+  .frases-apresentacao {
+    margin-top: 18px;
+  }
+
+  .onda-sonora {
+    bottom: 15px;
+    height: 65px;
+  }
+}
+
+/* ACESSIBILIDADE */
+
+@media (prefers-reduced-motion: reduce) {
+  .conteudo-carregamento,
+  .contorno-orelha,
+  .barra-equalizador,
+  .frase,
+  .onda-barra {
+    animation: none !important;
+  }
+
+  .contorno-orelha {
+    stroke-dashoffset: 0;
+  }
+
+  .frase {
+    width: auto;
+    opacity: 1;
+    border-right: none;
+  }
+}

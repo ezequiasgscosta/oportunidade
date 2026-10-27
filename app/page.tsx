@@ -20,6 +20,7 @@ import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
 import type { User } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
+import PreLoad from "./components/preload";
 import { useActiveVisitors } from "./components/active-visitors";
 import GoogleAd from "./components/google-ad";
 
@@ -53,6 +54,7 @@ export default function Home() {
   const [adminUserId, setAdminUserId] = useState<string | null>(null);
   const [tracks, setTracks] = useState<Track[]>([]);
   const [audioUrls, setAudioUrls] = useState<Record<string, string>>({});
+  const [loadedAudioTrackIds, setLoadedAudioTrackIds] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadedForUser, setLoadedForUser] = useState<string | null>(null);
   const [feedError, setFeedError] = useState("");
@@ -75,6 +77,7 @@ export default function Home() {
   const activeVisitors = useActiveVisitors();
   const isAdmin = adminUserId === user?.id;
   const feedLoading = loading || loadedForUser !== (user?.id ?? "anonymous");
+  const trackIds = tracks.map((track) => track.id).join(",");
 
   useEffect(() => {
     let active = true;
@@ -146,6 +149,7 @@ export default function Home() {
     ).then((entries) => {
       if (active) {
         setAudioUrls(Object.fromEntries(entries.filter((entry) => entry[1])) as Record<string, string>);
+        setLoadedAudioTrackIds(tracks.map((track) => track.id).join(","));
       }
     });
 
@@ -252,6 +256,7 @@ export default function Home() {
 
   return (
     <main className="app-shell">
+      <PreLoad isLoading={feedLoading || loadedAudioTrackIds !== trackIds} />
       <header className="topbar">
         <a className="brand" href="#feed" aria-label="Onda, início">
           <span className="brand-mark"><AudioLines size={21} strokeWidth={2.4} /></span>

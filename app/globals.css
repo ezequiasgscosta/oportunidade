@@ -1,21 +1,35 @@
 @import "tailwindcss";
 
 :root {
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  --ink: #18211e;
-  --muted: #727a74;
-  --line: #dedfd6;
-  --green: #caff55;
-  --coral: #ff7257;
-  --teal: #113e39;
-  --surface: #fffefa;
+  --background: #070A0B;
+  --background-secondary: #08111B;
+  --card: #0D1A28;
+
+  --primary: #FA851C;
+  --text: #F5F7FA;
+  --text-secondary: #9AA7B5;
+
+  --blue: #168BFF;
+  --green: #10C98A;
+  --purple: #7547F5;
+
+  --border: #26313D;
 }
 
-@theme inline {
-  --color-background: var(--paper);
-  --color-foreground: var(--ink);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@theme {
+  --color-background: #070A0B;
+  --color-background-secondary: #08111B;
+  --color-card: #0D1A28;
+
+  --color-primary: #FA851C;
+  --color-foreground: #F5F7FA;
+  --color-muted: #9AA7B5;
+
+  --color-blue: #168BFF;
+  --color-green: #10C98A;
+  --color-purple: #7547F5;
+
+  --color-border: #26313D;
 }
 
 * {

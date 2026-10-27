@@ -17,6 +17,7 @@ export default function PrivacyPage() {
       <section>
         <h2>Informações que usamos</h2>
         <p>Ao criar uma conta, usamos seu nome e email para identificar seu perfil e autenticar seu acesso. Quando você envia uma música, armazenamos o título, o nome do artista, a categoria, o arquivo de áudio e o estado da análise.</p>
+        <p>Se você enviar uma sugestão de melhoria, armazenamos o título e o texto da sugestão vinculados à sua conta para que a equipe possa analisá-la. Essas sugestões não são exibidas publicamente.</p>
         <p>Usamos Supabase para autenticação, banco de dados e armazenamento dos áudios. As faixas pendentes não são disponibilizadas publicamente; as aprovadas podem ser ouvidas no feed.</p>
       </section>
       <section>

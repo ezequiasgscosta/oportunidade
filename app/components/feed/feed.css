@@ -269,6 +269,29 @@
   color: #ffb1a3;
 }
 
+.suggestion-cta {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.suggestion-cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 0;
+  border: 0;
+  background: transparent;
+  color: var(--primary);
+  cursor: pointer;
+  font-size: 10px;
+  transition: color 150ms ease;
+}
+
+.suggestion-cta-button:hover {
+  color: #ffad5c;
+}
+
 .empty-state,
 .loading-state {
   display: flex;
@@ -412,6 +435,8 @@
   .stat-block span { font-size: 10px; }
   .stat-rule { height: 21px; }
   .section-heading { min-height: 58px; }
+  .suggestion-cta { margin-top: 7px; }
+  .suggestion-cta-button { font-size: 9px; }
   .section-note { max-width: 115px; font-size: 8px; text-align: right; }
   .track-row { grid-template-columns: 20px 42px minmax(0, 1fr) 64px; gap: 8px; }
   .track-art { width: 40px; height: 40px; }

@@ -6,6 +6,7 @@ import {
   Check,
   Clock3,
   LoaderCircle,
+  Lightbulb,
   LogIn,
   LogOut,
   Music2,
@@ -13,6 +14,7 @@ import {
   Plus,
   Save,
   ShieldCheck,
+  CheckCheck,
   Trash2,
   UserRoundMinus,
   UsersRound,
@@ -36,6 +38,13 @@ type Track = {
   created_at: string;
 };
 type AdminMember = { user_id: string; email: string | null; created_at: string };
+type SiteSuggestion = {
+  id: string;
+  title: string;
+  message: string;
+  status: "new" | "reviewed";
+  created_at: string;
+};
 type DashboardStats = {
   total_users: number;
   total_tracks: number;
@@ -76,11 +85,13 @@ export default function AdminPage() {
   const [stats, setStats] = useState(emptyStats);
   const [tracks, setTracks] = useState<Track[]>([]);
   const [admins, setAdmins] = useState<AdminMember[]>([]);
+  const [suggestions, setSuggestions] = useState<SiteSuggestion[]>([]);
   const [audioUrls, setAudioUrls] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const [refreshIndex, setRefreshIndex] = useState(0);
   const [filter, setFilter] = useState<TrackFilter>("pending");
   const [activeTrack, setActiveTrack] = useState("");
+  const [activeSuggestion, setActiveSuggestion] = useState("");
   const [editingTrack, setEditingTrack] = useState<Track | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const [editArtist, setEditArtist] = useState("");
@@ -149,14 +160,15 @@ export default function AdminPage() {
     async function loadDashboard() {
       setLoading(true);
       setError("");
-      const [statsResult, adminsResult, tracksResult] = await Promise.all([
+      const [statsResult, adminsResult, tracksResult, suggestionsResult] = await Promise.all([
         supabase.rpc("admin_dashboard_stats"),
         supabase.rpc("admin_list_admins"),
         supabase.from("tracks").select("*").order("created_at", { ascending: false }),
+        supabase.from("site_suggestions").select("*").order("created_at", { ascending: false }),
       ]);
 
       if (!active) return;
-      if (statsResult.error || adminsResult.error || tracksResult.error) {
+      if (statsResult.error || adminsResult.error || tracksResult.error || suggestionsResult.error) {
         setError("Não foi possível carregar o painel. Aplique as migrations do Supabase e tente novamente.");
         setLoading(false);
         return;
@@ -166,6 +178,7 @@ export default function AdminPage() {
       setStats((statsResult.data?.[0] as DashboardStats | undefined) ?? emptyStats);
       setAdmins((adminsResult.data ?? []) as AdminMember[]);
       setTracks(nextTracks);
+      setSuggestions((suggestionsResult.data ?? []) as SiteSuggestion[]);
 
       const urls = await Promise.all(
         nextTracks.map(async (track) => {
@@ -263,6 +276,73 @@ export default function AdminPage() {
       setRefreshIndex((index) => index + 1);
     }
     setActiveTrack("");
+  }
+
+  async function updateSuggestion(suggestion: SiteSuggestion) {
+    const nextStatus = suggestion.status === "new" ? "reviewed" : "new";
+    setActiveSuggestion(suggestion.id);
+    setError("");
+    setNotice("");
+    const { error: updateError } = await supabase
+      .from("site_suggestions")
+      .update({ status: nextStatus })
+      .eq("id", suggestion.id);
+
+    if (updateError) {
+      setError("Não foi possível atualizar o status da sugestão.");
+    } else {
+      setNotice(nextStatus === "reviewed" ? "Sugestão marcada como revisada." : "Sugestão reaberta.");
+      setRefreshIndex((index) => index + 1);
+    }
+    setActiveSuggestion("");
+  }
+
+  async function deleteSuggestion(suggestion: SiteSuggestion) {
+    if (!window.confirm(`Apagar a sugestão “${suggestion.title}”? Esta ação não pode ser desfeita.`)) return;
+
+    setActiveSuggestion(suggestion.id);
+    setError("");
+    setNotice("");
+    const { data: deletedSuggestions, error: deleteError } = await supabase
+      .from("site_suggestions")
+      .delete()
+      .eq("id", suggestion.id)
+      .select("id");
+
+    if (deleteError) {
+      setError("Não foi possível apagar a sugestão. Confira se a migration mais recente foi aplicada no Supabase.");
+    } else if (!deletedSuggestions?.length) {
+      setError("A sugestão não foi apagada. Confira se a migration de exclusão foi aplicada e se sua conta tem permissão de administrador.");
+    } else {
+      setNotice("Sugestão apagada.");
+      setRefreshIndex((index) => index + 1);
+    }
+    setActiveSuggestion("");
+  }
+
+  async function deleteAllSuggestions() {
+    if (suggestions.length === 0) return;
+    if (!window.confirm(`Apagar todas as ${suggestions.length} sugestões? Esta ação não pode ser desfeita.`)) return;
+
+    setActiveSuggestion("all");
+    setError("");
+    setNotice("");
+    const suggestionIds = suggestions.map((suggestion) => suggestion.id);
+    const { data: deletedSuggestions, error: deleteError } = await supabase
+      .from("site_suggestions")
+      .delete()
+      .in("id", suggestionIds)
+      .select("id");
+
+    if (deleteError) {
+      setError("Não foi possível apagar as sugestões. Confira se a migration mais recente foi aplicada no Supabase.");
+    } else if (!deletedSuggestions?.length) {
+      setError("Nenhuma sugestão foi apagada. Confira se a migration de exclusão foi aplicada e se sua conta tem permissão de administrador.");
+    } else {
+      setNotice(`${deletedSuggestions.length} de ${suggestionIds.length} sugestões apagadas.`);
+      setRefreshIndex((index) => index + 1);
+    }
+    setActiveSuggestion("");
   }
 
   async function addAdmin(event: FormEvent<HTMLFormElement>) {
@@ -440,6 +520,70 @@ export default function AdminPage() {
               </article>
             ))}
           </div>
+        </section>
+
+        <section className="admin-panel-section admin-suggestions-section" aria-labelledby="suggestions-title">
+          <div className="admin-section-heading">
+            <div><span className="admin-section-index">03</span><div><h2 id="suggestions-title">Sugestões de melhorias</h2><p>Ideias enviadas pela comunidade para aprimorar o site.</p></div></div>
+            <div className="admin-suggestions-tools">
+              <span className="admin-section-count">{suggestions.filter((suggestion) => suggestion.status === "new").length} novas</span>
+              {suggestions.length > 0 && (
+                <button
+                  className="delete-all-suggestions-button"
+                  type="button"
+                  disabled={activeSuggestion !== ""}
+                  onClick={() => void deleteAllSuggestions()}
+                >
+                  {activeSuggestion === "all" ? <LoaderCircle className="spin" size={14} /> : <Trash2 size={14} />}
+                  Apagar todas
+                </button>
+              )}
+            </div>
+          </div>
+          {loading ? (
+            <div className="loading-state"><LoaderCircle className="spin" size={22} /> Carregando sugestões...</div>
+          ) : suggestions.length ? (
+            <div className="admin-suggestions-list">
+              {suggestions.map((suggestion) => (
+                <article className={`admin-suggestion${suggestion.status === "reviewed" ? " revisada" : ""}`} key={suggestion.id}>
+                  <div className="admin-suggestion-icon"><Lightbulb size={18} /></div>
+                  <div className="admin-suggestion-content">
+                    <div className="admin-suggestion-heading">
+                      <h3>{suggestion.title}</h3>
+                      <span className={`admin-suggestion-status ${suggestion.status}`}>{suggestion.status === "new" ? "Nova" : "Revisada"}</span>
+                    </div>
+                    <p>{suggestion.message}</p>
+                    <time dateTime={suggestion.created_at}>{new Date(suggestion.created_at).toLocaleString("pt-BR")}</time>
+                  </div>
+                  <button
+                    className="suggestion-review-button"
+                    type="button"
+                    disabled={activeSuggestion === suggestion.id}
+                    onClick={() => void updateSuggestion(suggestion)}
+                    aria-label={suggestion.status === "new" ? "Marcar sugestão como revisada" : "Reabrir sugestão"}
+                    title={suggestion.status === "new" ? "Marcar como revisada" : "Reabrir sugestão"}
+                  >
+                    {activeSuggestion === suggestion.id
+                      ? <LoaderCircle className="spin" size={16} />
+                      : suggestion.status === "new" ? <CheckCheck size={17} /> : <Clock3 size={17} />}
+                    <span>{suggestion.status === "new" ? "Revisada" : "Reabrir"}</span>
+                  </button>
+                  <button
+                    className="delete-suggestion-button"
+                    type="button"
+                    disabled={activeSuggestion !== ""}
+                    onClick={() => void deleteSuggestion(suggestion)}
+                    aria-label={`Apagar sugestão: ${suggestion.title}`}
+                    title="Apagar sugestão"
+                  >
+                    {activeSuggestion === suggestion.id ? <LoaderCircle className="spin" size={16} /> : <Trash2 size={16} />}
+                  </button>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="admin-empty-state"><Lightbulb size={21} /><strong>Nenhuma sugestão recebida</strong><span>As ideias enviadas pelos usuários aparecerão aqui.</span></div>
+          )}
         </section>
 
         <footer className="page-footer">

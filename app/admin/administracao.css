@@ -376,6 +376,156 @@
 .remove-admin-button:disabled { cursor: not-allowed; opacity: .42; }
 .admin-notice { display: flex; align-items: center; gap: 7px; margin: 13px 0 0; padding: 9px 11px; background: #e8f3e3; color: #3a7046; font-size: 11px; }
 
+.admin-suggestions-section { margin-top: 19px; }
+
+.admin-suggestions-list {
+  display: grid;
+  padding: 0 19px;
+}
+
+.admin-suggestion {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto auto;
+  align-items: start;
+  gap: 13px;
+  padding: 17px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.admin-suggestion:last-child { border-bottom: 0; }
+
+.admin-suggestion-icon {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 1px solid rgb(250 133 28 / 20%);
+  border-radius: 5px;
+  background: rgb(250 133 28 / 9%);
+  color: var(--primary);
+}
+
+.admin-suggestion-content { min-width: 0; }
+
+.admin-suggestion-heading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.admin-suggestion-heading h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+
+.admin-suggestion-content > p {
+  margin: 8px 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.admin-suggestion-content time {
+  color: #78889a;
+  font-size: 10px;
+}
+
+.admin-suggestion-status {
+  flex: 0 0 auto;
+  padding: 4px 7px;
+  border-radius: 999px;
+  background: rgb(250 133 28 / 12%);
+  color: var(--primary);
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.admin-suggestion-status.reviewed {
+  background: rgb(16 201 138 / 12%);
+  color: var(--green);
+}
+
+.admin-suggestion.revisada .admin-suggestion-icon {
+  border-color: rgb(16 201 138 / 20%);
+  background: rgb(16 201 138 / 9%);
+  color: var(--green);
+}
+
+.suggestion-review-button {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 9px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 600;
+  transition: border-color 150ms ease, color 150ms ease, background 150ms ease;
+}
+
+.suggestion-review-button:hover:not(:disabled) {
+  border-color: var(--green);
+  background: rgb(16 201 138 / 9%);
+  color: var(--green);
+}
+
+.suggestion-review-button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.admin-suggestions-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.delete-all-suggestions-button,
+.delete-suggestion-button {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 9px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: transparent;
+  color: #ff8875;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 600;
+  transition: border-color 150ms ease, background 150ms ease, color 150ms ease;
+}
+
+.delete-all-suggestions-button:hover:not(:disabled),
+.delete-suggestion-button:hover:not(:disabled) {
+  border-color: #ff8875;
+  background: rgb(255 136 117 / 10%);
+  color: #ffad9f;
+}
+
+.delete-suggestion-button {
+  width: 34px;
+  padding: 0;
+}
+
+.delete-all-suggestions-button:disabled,
+.delete-suggestion-button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
 @media (max-width: 760px) {
   .admin-stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .admin-music-row { grid-template-columns: 38px minmax(120px, 1fr) 68px auto; gap: 9px; padding: 12px 0; }
@@ -384,6 +534,12 @@
   .admin-row-actions { grid-column: 4; grid-row: 1 / 3; flex-direction: column; }
   .admin-row-actions .approve-button, .admin-row-actions .reject-button, .admin-row-actions .edit-track-button { width: 33px; justify-content: center; overflow: hidden; padding: 0; font-size: 0; }
   .admin-row-actions .approve-button svg, .admin-row-actions .reject-button svg, .admin-row-actions .edit-track-button svg { flex: 0 0 auto; }
+  .admin-suggestions-list { padding: 0 13px; }
+  .admin-suggestion { grid-template-columns: 32px minmax(0, 1fr) auto; gap: 9px; }
+  .admin-suggestion-icon { width: 31px; height: 31px; }
+  .admin-suggestion-heading { align-items: flex-start; flex-wrap: wrap; }
+  .suggestion-review-button { grid-column: 2; justify-self: start; }
+  .delete-suggestion-button { grid-column: 3; grid-row: 2; }
 }
 
 @media (max-width: 520px) {
@@ -419,4 +575,165 @@
   .add-admin-button { gap: 4px; padding: 0 8px; font-size: 10px; white-space: nowrap; }
   .admin-members-list { padding: 0 12px; }
   .member-role { display: none; }
+  .admin-suggestions-list { padding: 0 12px; }
+  .admin-suggestion { padding: 14px 0; }
+  .admin-suggestion-content > p { font-size: 11px; }
+  .admin-suggestions-tools { gap: 5px; }
+  .delete-all-suggestions-button { gap: 4px; padding: 0 7px; font-size: 9px; }
+}
+
+.admin-app-shell,
+.admin-gate-page,
+.admin-gate {
+  --paper: var(--background);
+  --surface: var(--card);
+  --line: var(--border);
+  --ink: var(--text);
+  --muted: var(--text-secondary);
+  --teal: var(--primary);
+  --coral: var(--primary);
+  background-color: var(--background);
+  color: var(--text);
+}
+
+.admin-app-shell {
+  --card: var(--background);
+  background-image: repeating-linear-gradient(0deg, transparent, transparent 39px, rgb(38 49 61 / 10%) 40px);
+}
+
+.admin-app-shell .topbar {
+  position: sticky;
+  z-index: 10;
+  top: 0;
+  display: flex;
+  min-height: 76px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 0 max(6vw, calc((100vw - 1240px) / 2));
+  border-bottom: 1px solid var(--border);
+  background: rgb(7 10 11 / 94%);
+  backdrop-filter: blur(14px);
+}
+
+.admin-app-shell .brand {
+  gap: 9px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.admin-app-shell .brand-mark {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: 8px;
+  background: rgb(250 133 28 / 12%);
+  color: var(--primary);
+}
+
+.admin-app-shell .brand-word { color: var(--text); font-size: 20px; }
+.admin-app-shell .brand-word span { margin-left: 4px; color: var(--primary); }
+.admin-app-shell .brand-caption { color: var(--text-secondary); }
+.admin-app-shell .admin-session { color: var(--text-secondary); }
+.admin-app-shell .admin-session svg { color: var(--primary); }
+.admin-app-shell .admin-page-heading { border-color: var(--border); }
+.admin-app-shell .admin-page-heading h1,
+.admin-app-shell .admin-stat-card strong,
+.admin-app-shell .admin-section-heading h2,
+.admin-app-shell .admin-music-row .track-meta h3,
+.admin-app-shell .admin-member-row strong { color: var(--text); }
+.admin-app-shell .admin-page-heading p,
+.admin-app-shell .admin-section-heading p,
+.admin-app-shell .admin-stat-card small,
+.admin-app-shell .admin-section-index,
+.admin-app-shell .admin-stat-label,
+.admin-app-shell .online-count-note,
+.admin-app-shell .admin-member-row span,
+.admin-app-shell .admin-members-list span { color: var(--text-secondary); }
+.admin-app-shell .admin-heading-tag,
+.admin-app-shell .admin-section-count,
+.admin-app-shell .admin-stat-card,
+.admin-app-shell .admin-panel-section {
+  border-color: var(--border);
+  background: var(--card);
+  color: var(--text);
+}
+.admin-app-shell .admin-stat-icon,
+.admin-app-shell .stat-pending .admin-stat-icon,
+.admin-app-shell .stat-approved .admin-stat-icon,
+.admin-app-shell .stat-rejected .admin-stat-icon,
+.admin-app-shell .stat-online .admin-stat-icon,
+.admin-app-shell .stat-total .admin-stat-icon {
+  background: rgb(250 133 28 / 12%);
+  color: var(--primary);
+}
+.admin-app-shell .stat-approved .admin-stat-icon { background: rgb(16 201 138 / 12%); color: var(--green); }
+.admin-app-shell .stat-pending .admin-stat-icon { background: rgb(250 173 82 / 12%); color: #faad52; }
+.admin-app-shell .stat-rejected .admin-stat-icon { background: rgb(255 136 117 / 12%); color: #ff8875; }
+.admin-app-shell .stat-online .admin-stat-icon { background: rgb(22 139 255 / 12%); color: var(--blue); }
+.admin-app-shell .admin-section-heading,
+.admin-app-shell .admin-filter-tabs,
+.admin-app-shell .admin-music-row,
+.admin-app-shell .add-admin-form,
+.admin-app-shell .admin-member-row { border-color: var(--border); }
+.admin-app-shell .admin-section-count { background: var(--background-secondary); color: var(--text-secondary); }
+.admin-app-shell .admin-filter-tabs button { color: var(--text-secondary); }
+.admin-app-shell .admin-filter-tabs button.active { border-bottom-color: var(--primary); color: var(--primary); }
+.admin-app-shell .admin-filter-tabs button span { color: #78889a; }
+.admin-app-shell .admin-track-status { background: var(--background-secondary); color: var(--text-secondary); }
+.admin-app-shell .admin-track-status.status-pending { background: rgb(250 173 82 / 12%); color: #faad52; }
+.admin-app-shell .admin-track-status.status-approved { background: rgb(16 201 138 / 12%); color: var(--green); }
+.admin-app-shell .admin-track-status.status-rejected { background: rgb(255 136 117 / 12%); color: #ff8875; }
+.admin-app-shell .admin-empty-state { color: var(--primary); }
+.admin-app-shell .admin-empty-state strong { color: var(--text); }
+.admin-app-shell .admin-empty-state span { color: var(--text-secondary); }
+.admin-app-shell .add-admin-form > label { color: var(--text); }
+.admin-app-shell .add-admin-form input {
+  border-color: var(--border);
+  background: var(--background-secondary);
+  color: var(--text);
+}
+.admin-app-shell .add-admin-form input::placeholder,
+.admin-app-shell .add-admin-form small { color: var(--text-secondary); }
+.admin-app-shell .add-admin-button { background: var(--green); color: #070a0b; }
+.admin-app-shell .member-avatar,
+.admin-app-shell .member-avatar-1,
+.admin-app-shell .member-avatar-2,
+.admin-app-shell .member-avatar-3 {
+  background: rgb(250 133 28 / 12%);
+  color: var(--primary);
+}
+.admin-app-shell .member-role { border-color: var(--border); color: var(--primary); }
+.admin-app-shell .remove-admin-button { color: var(--text-secondary); }
+.admin-app-shell .remove-admin-button:hover:not(:disabled) { background: rgb(255 136 117 / 12%); color: #ff8875; }
+.admin-app-shell .admin-notice {
+  border: 1px solid rgb(16 201 138 / 25%);
+  background: rgb(16 201 138 / 10%);
+  color: var(--green);
+}
+.admin-app-shell .admin-login-panel {
+  border-color: var(--border);
+  background: var(--card);
+}
+.admin-app-shell .admin-login-icon { background: rgb(250 133 28 / 12%); color: var(--primary); }
+.admin-gate-page .admin-back-link,
+.admin-gate .admin-back-link { color: var(--text-secondary); }
+.admin-gate-page .admin-back-link:hover,
+.admin-gate .admin-back-link:hover { color: var(--primary); }
+.admin-gate-page .modal-kicker { color: var(--primary); }
+.admin-gate-page .admin-denied-icon { background: rgb(255 136 117 / 12%); color: #ff8875; }
+.admin-gate-page .quiet-button { background: var(--background-secondary); color: var(--text); }
+.admin-app-shell .page-footer { border-color: var(--border); color: var(--text-secondary); }
+.admin-app-shell .footer-brand { color: var(--text); }
+.admin-app-shell .footer-brand svg { color: var(--primary); }
+
+@media (max-width: 760px) {
+  .admin-app-shell .topbar { padding: 0 22px; }
+}
+
+@media (max-width: 520px) {
+  .admin-app-shell .topbar { min-height: 68px; padding: 0 14px; }
+  .admin-app-shell .brand-caption { display: none; }
+  .admin-app-shell .brand-word { font-size: 17px; }
 }

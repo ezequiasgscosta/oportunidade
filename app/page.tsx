@@ -8,6 +8,7 @@ import {
   Disc3,
   Headphones,
   LoaderCircle,
+  Lightbulb,
   LogIn,
   Plus,
   Search,
@@ -60,7 +61,7 @@ export default function Home() {
   const [feedError, setFeedError] = useState("");
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("Todas");
-  const [modal, setModal] = useState<"auth" | "submit" | null>(null);
+  const [modal, setModal] = useState<"auth" | "submit" | "suggestion" | null>(null);
   const [authMode, setAuthMode] = useState<"login" | "signup">("login");
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
@@ -73,6 +74,9 @@ export default function Home() {
   const [location, setLocation] = useState("");
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [suggestionTitle, setSuggestionTitle] = useState("");
+  const [suggestionMessage, setSuggestionMessage] = useState("");
+  const [suggestionError, setSuggestionError] = useState("");
   const [refreshIndex, setRefreshIndex] = useState(0);
   const activeVisitors = useActiveVisitors();
   const isAdmin = adminUserId === user?.id;
@@ -254,6 +258,46 @@ export default function Home() {
     setSubmitting(false);
   }
 
+  async function handleSubmitSuggestion(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!user) {
+      setSuggestionError("Entre na sua conta para enviar uma sugestão.");
+      return;
+    }
+
+    const trimmedTitle = suggestionTitle.trim();
+    const trimmedMessage = suggestionMessage.trim();
+    if (!trimmedTitle || !trimmedMessage) {
+      setSuggestionError("Preencha o título e a descrição da sugestão.");
+      return;
+    }
+
+    setSubmitting(true);
+    setSuggestionError("");
+    const { error: insertError } = await supabase.from("site_suggestions").insert({
+      user_id: user.id,
+      title: trimmedTitle,
+      message: trimmedMessage,
+    });
+
+    if (insertError) {
+      if (insertError.code === "42P01" || insertError.code === "PGRST205") {
+        setSuggestionError("O recurso de sugestões ainda não foi ativado no banco. Aplique a migration do Supabase e tente novamente.");
+      } else if (insertError.code === "42501") {
+        setSuggestionError("Sua sessão não tem permissão para enviar. Saia da conta, entre novamente e tente de novo.");
+      } else {
+        setSuggestionError(`Não foi possível enviar sua sugestão. ${insertError.message}`);
+      }
+      setSubmitting(false);
+      return;
+    }
+
+    setSuggestionTitle("");
+    setSuggestionMessage("");
+    setModal(null);
+    setSubmitting(false);
+  }
+
   return (
     <main className="app-shell">
       <PreLoad isLoading={feedLoading || loadedAudioTrackIds !== trackIds} />
@@ -379,6 +423,24 @@ export default function Home() {
             )}
         </>
 
+        <div className="suggestion-cta">
+          <button
+            type="button"
+            className="suggestion-cta-button"
+            onClick={() => {
+              if (user) {
+                setSuggestionError("");
+                setModal("suggestion");
+              } else {
+                setAuthMode("login");
+                setModal("auth");
+              }
+            }}
+          >
+            <Lightbulb size={13} /> Sugerir melhoria
+          </button>
+        </div>
+
         <footer className="page-footer">
           <a className="footer-brand" href="#feed"><AudioLines size={16} /> Tirando de Ouvido</a>
           <span>Feito para quem toca na igreja.</span>
@@ -393,8 +455,8 @@ export default function Home() {
       </div>
 
       {modal && (
-        <div className={`modal-backdrop${modal === "submit" ? " fundo-envio-musica" : ""}`} role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setModal(null); }}>
-          <section className={`modal-panel${modal === "submit" ? " envio-musica" : ""}`} role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div className={`modal-backdrop${modal === "submit" ? " fundo-envio-musica" : modal === "suggestion" ? " fundo-sugestao-site" : ""}`} role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setModal(null); }}>
+          <section className={`modal-panel${modal === "submit" ? " envio-musica" : modal === "suggestion" ? " sugestao-site" : ""}`} role="dialog" aria-modal="true" aria-labelledby="modal-title">
             <button className="modal-close" onClick={() => setModal(null)} aria-label="Fechar"><X size={19} /></button>
             {modal === "auth" ? (
               <>
@@ -416,7 +478,7 @@ export default function Home() {
                 </form>
                 <p className="secure-note"><ShieldCheck size={14} /> Acesso protegido</p>
               </>
-            ) : (
+            ) : modal === "submit" ? (
               <>
                 <span className="modal-symbol modal-symbol-lime"><Upload size={21} /></span>
                 <p className="modal-kicker">NOVO ENVIO <span>01 / 02</span></p>
@@ -438,6 +500,40 @@ export default function Home() {
                   </button>
                 </form>
                 <p className="secure-note"><ShieldCheck size={14} /> O áudio fica privado até ser aprovado</p>
+              </>
+            ) : (
+              <>
+                <span className="modal-symbol modal-symbol-lime"><Lightbulb size={21} /></span>
+                <p className="modal-kicker">SUGESTÃO DA COMUNIDADE</p>
+                <h2 id="modal-title">Ajude a melhorar o site</h2>
+                <p className="modal-copy">Compartilhe sua ideia com a equipe. As sugestões são visíveis apenas para a administração.</p>
+                <form className="modal-form" onSubmit={(event) => void handleSubmitSuggestion(event)}>
+                  <label>
+                    Título da sugestão
+                    <input
+                      required
+                      maxLength={120}
+                      value={suggestionTitle}
+                      onChange={(event) => setSuggestionTitle(event.target.value)}
+                      placeholder="Ex.: melhorar a busca por músicas"
+                    />
+                  </label>
+                  <label>
+                    Conte sua ideia
+                    <textarea
+                      required
+                      maxLength={2000}
+                      rows={5}
+                      value={suggestionMessage}
+                      onChange={(event) => setSuggestionMessage(event.target.value)}
+                      placeholder="O que você gostaria que mudasse ou fosse acrescentado?"
+                    />
+                  </label>
+                  {suggestionError && <p className="form-error" role="alert">{suggestionError}</p>}
+                  <button className="form-submit" type="submit" disabled={submitting}>
+                    {submitting ? <><LoaderCircle className="spin" size={17} /> Enviando...</> : <>Enviar sugestão <ArrowUpRight size={17} /></>}
+                  </button>
+                </form>
               </>
             )}
           </section>

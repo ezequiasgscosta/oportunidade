@@ -1,6 +1,10 @@
 
 /* TELA DE CARREGAMENTO */
 
+html:has(.tela-carregamento) {
+  overflow: hidden;
+}
+
 .tela-carregamento {
   position: fixed;
   inset: 0;

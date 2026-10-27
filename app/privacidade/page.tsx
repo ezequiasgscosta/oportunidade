@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import SiteInfoLayout from "../components/site-info-layout";
+import LayoutInformativo from "../components/layout-informativo";
 
 export const metadata: Metadata = {
   title: "Política de Privacidade | Canta Igreja",
@@ -8,10 +8,10 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <SiteInfoLayout
-      eyebrow="SEUS DADOS"
-      title="Política de privacidade"
-      intro="Esta página explica quais informações são usadas para operar o Canta Igreja, incluindo cookies, analytics e publicidade."
+    <LayoutInformativo
+      categoria="SEUS DADOS"
+      titulo="Política de privacidade"
+      descricao="Esta página explica quais informações são usadas para operar o Canta Igreja, incluindo cookies, analytics e publicidade."
     >
       <p className="info-updated">Última atualização: 21 de outubro de 2026</p>
       <section>
@@ -38,6 +38,6 @@ export default function PrivacyPage() {
         <h2>Visitantes online</h2>
         <p>Para mostrar uma estimativa de visitantes conectados, o site cria um identificador aleatório no armazenamento local do navegador e informa a presença ao Supabase Realtime enquanto a conexão estiver ativa. Esse identificador não contém seu nome ou email; várias abas do mesmo navegador são contadas como um visitante. Você pode removê-lo limpando os dados do site no navegador.</p>
       </section>
-    </SiteInfoLayout>
+    </LayoutInformativo>
   );
 }

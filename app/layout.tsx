@@ -20,16 +20,16 @@ const publisherId = process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_PUBLISHER_ID;
 const validPublisherId = publisherId && /^ca-pub-\d+$/.test(publisherId) ? publisherId : null;
 
 export const metadata: Metadata = {
-  title: "Canta Igreja | Louvores da comunidade",
+  title: "Tirando de Ouvido | Louvores da comunidade",
   description: "Ouça e compartilhe hinos da Harpa, hinos avulsos e covers.",
   ...(siteVerification ? { verification: { google: siteVerification } } : {}),
   ...(validPublisherId ? { other: { "google-adsense-account": validPublisherId } } : {}),
   openGraph: {
     type: "website",
     locale: "pt_BR",
-    siteName: "Canta Igreja",
-    title: "Canta Igreja | Louvores da comunidade",
-    description: "Ouça e compartilhe hinos da Harpa, hinos avulsos e covers.",
+    siteName: "Tirando de Ouvido",
+    title: "tirando de ouvido | Louvores da comunidade",
+    description: "Ouça e compartilhe hinos da Harpa, hinos avulsos e covers para musicos treinarem seus ouvidos.",
   },
   twitter: { card: "summary" },
 };

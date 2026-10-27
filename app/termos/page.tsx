@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import SiteInfoLayout from "../components/site-info-layout";
+import LayoutInformativo from "../components/layout-informativo";
 
 export const metadata: Metadata = {
   title: "Termos de uso | Canta Igreja",
@@ -8,10 +8,10 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <SiteInfoLayout
-      eyebrow="COMBINADOS DA COMUNIDADE"
-      title="Termos de uso"
-      intro="Ao navegar ou criar uma conta no Canta Igreja, você concorda com estas condições de uso."
+    <LayoutInformativo
+      categoria="COMBINADOS DA COMUNIDADE"
+      titulo="Termos de uso"
+      descricao="Ao navegar ou criar uma conta no Canta Igreja, você concorda com estas condições de uso."
     >
       <p className="info-updated">Última atualização: 21 de outubro de 2026</p>
       <section>
@@ -35,6 +35,6 @@ export default function TermsPage() {
         <h2>Publicidade e serviços externos</h2>
         <p>O site pode exibir anúncios e usar serviços de terceiros, incluindo Google Analytics e Google AdSense. O uso desses serviços também está sujeito às políticas dos respectivos fornecedores. Consulte a política de privacidade para detalhes sobre cookies e dados.</p>
       </section>
-    </SiteInfoLayout>
+    </LayoutInformativo>
   );
 }

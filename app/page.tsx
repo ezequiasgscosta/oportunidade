@@ -9,7 +9,6 @@ import {
   Headphones,
   LoaderCircle,
   LogIn,
-  LogOut,
   Plus,
   Search,
   ShieldCheck,
@@ -20,6 +19,7 @@ import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
 import type { User } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
+import Cabecalho from "./components/cabecalho/cabecalho";
 import PreLoad from "./components/preload";
 import { useActiveVisitors } from "./components/active-visitors";
 import GoogleAd from "./components/google-ad";
@@ -257,41 +257,23 @@ export default function Home() {
   return (
     <main className="app-shell">
       <PreLoad isLoading={feedLoading || loadedAudioTrackIds !== trackIds} />
-      <header className="topbar">
-        <a className="brand" href="#feed" aria-label="Onda, início">
-          <span className="brand-mark"><AudioLines size={21} strokeWidth={2.4} /></span>
-          <span className="brand-word">tirando d<span>e Ouvido</span></span>
-          <span className="brand-caption">FEED DE MÚSICA</span>
-        </a>
-        <nav className="top-actions" aria-label="Navegação principal">
-          {isAdmin && (
-            <Link className="nav-link" href="/admin">
-              <ShieldCheck size={16} /> Admin
-            </Link>
-          )}
-          {user ? (
-            <>
-              <span className="user-email">{userLabel}</span>
-              <button className="quiet-button" onClick={handleSignOut} aria-label="Sair" title="Sair">
-                <LogOut size={17} />
-              </button>
-            </>
-          ) : (
-            <button className="quiet-button sign-in-link" onClick={() => { setModal("auth"); setAuthMode("login"); }}>
-              <LogIn size={16} /> Entrar
-            </button>
-          )}
-          <button
-            className="add-button"
-            onClick={() => {
-              if (user) setModal("submit");
-              else { setAuthMode("login"); setModal("auth"); }
-            }}
-          >
-            <Plus size={17} strokeWidth={2.5} /> <span>Enviar música</span>
-          </button>
-        </nav>
-      </header>
+      <Cabecalho
+        temAcessoAdmin={isAdmin}
+        usuarioAutenticado={Boolean(user)}
+        nomeUsuario={userLabel}
+        aoEntrar={() => {
+          setModal("auth");
+          setAuthMode("login");
+        }}
+        aoSair={handleSignOut}
+        aoEnviarMusica={() => {
+          if (user) setModal("submit");
+          else {
+            setAuthMode("login");
+            setModal("auth");
+          }
+        }}
+      />
 
       <div className="page-content" id="feed">
         <section className="intro-row">

@@ -1,0 +1,16 @@
+/* Informational pages */
+
+@media (max-width: 520px) {
+  .info-topbar { padding: 0 14px; }
+  .info-home-link { font-size: 0; }
+  .info-home-link svg { width: 20px; height: 20px; }
+  .info-content { width: calc(100% - 34px); padding: 49px 0; }
+  .info-content > h1 { font-size: 32px; }
+  .info-intro { font-size: 14px; }
+  .info-body h2 { font-size: 15px; }
+  .info-body p { font-size: 12px; }
+  .contact-card { grid-template-columns: 34px minmax(0, 1fr); gap: 11px; padding: 14px; }
+  .contact-icon { width: 34px; height: 34px; }
+  .info-footer { align-items: flex-start; flex-direction: column; gap: 11px; padding: 17px; }
+  .info-footer > nav { gap: 13px; }
+}

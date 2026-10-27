@@ -1,0 +1,209 @@
+/* Cabeçalho e seus elementos */
+
+.cabecalho {
+  position: sticky;
+  z-index: 10;
+  top: 0;
+  display: flex;
+  min-height: 76px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 0 max(6vw, calc((100vw - 1240px) / 2));
+  border-bottom: 1px solid #26313d;
+  background: rgb(7 10 11 / 94%);
+  backdrop-filter: blur(14px);
+}
+
+.marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: #f5f7fa;
+  text-decoration: none;
+}
+
+.icone-marca {
+  display: grid;
+  width: 60px;
+  height: 60px;
+  flex: 0 0 auto;
+  place-items: center;
+}
+
+.ouvido {
+  width: 60px;
+  height: 60px;
+  overflow: visible;
+}
+
+.ouvido-contorno,
+.ouvido-equalizador {
+  stroke: #fa851c;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ouvido-contorno {
+  stroke-width: 8;
+}
+
+.ouvido-equalizador {
+  stroke-width: 6;
+}
+
+.nome-marca {
+  color: #f5f7fa;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.destaque-marca {
+  color: #fa851c;
+}
+
+.descricao-marca {
+  margin-left: 7px;
+  padding-left: 13px;
+  border-left: 1px solid #26313d;
+  color: #9aa7b5;
+  font-family: monospace;
+  font-size: 9px;
+}
+
+.acoes-cabecalho {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.link-menu,
+.botao-simples,
+.botao-enviar-musica {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.link-menu {
+  gap: 7px;
+  padding: 8px 10px;
+  background: transparent;
+  color: #f5f7fa;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.botao-simples {
+  min-width: 38px;
+  height: 38px;
+  gap: 7px;
+  padding: 0 9px;
+  border-radius: 5px;
+  background: transparent;
+  color: #f5f7fa;
+  font-size: 13px;
+}
+
+.link-menu:hover,
+.botao-simples:hover {
+  background: #26313d;
+}
+
+.nome-usuario {
+  max-width: 190px;
+  overflow: hidden;
+  color: #f5f7fa;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.botao-enviar-musica {
+  min-height: 42px;
+  gap: 8px;
+  padding: 0 15px;
+  border-radius: 5px;
+  background: #10c98a;
+  color: #070a0b;
+  font-size: 13px;
+  font-weight: 650;
+  transition: background 150ms ease, transform 150ms ease;
+}
+
+.botao-enviar-musica:hover {
+  transform: translateY(-1px);
+  background: #0eb77e;
+}
+
+@media (max-width: 780px) {
+  .cabecalho {
+    min-height: 68px;
+    padding: 0 22px;
+  }
+}
+
+@media (max-width: 520px) {
+  .cabecalho {
+    gap: 8px;
+    padding: 0 14px;
+  }
+
+  .marca {
+    gap: 6px;
+  }
+
+   .icone-marca{
+    width: 44px;
+    height: 44px;
+  }
+
+
+  
+  .ouvido {
+    width: 44px;
+    height: 44px;
+  }
+
+  .nome-marca {
+    font-size: 20px;
+  }
+
+  .descricao-marca {
+    display: none;
+  }
+
+  .acoes-cabecalho {
+    gap: 5px;
+  }
+
+  .nome-usuario {
+    display: none;
+  }
+
+  .botao-entrar {
+    width: 36px;
+    padding: 0;
+    font-size: 0;
+  }
+
+  .botao-enviar-musica {
+    min-height: 38px;
+    gap: 5px;
+    padding: 0 9px;
+    font-size: 11px;
+  }
+
+  .botao-enviar-musica svg {
+    width: 15px;
+  }
+
+  .link-menu {
+    gap: 4px;
+    padding: 7px 5px;
+    font-size: 11px;
+  }
+}

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import SiteInfoLayout from "../components/site-info-layout";
+import LayoutInformativo from "../components/layout-informativo";
 
 export const metadata: Metadata = {
   title: "Sobre | Canta Igreja",
@@ -9,10 +9,10 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <SiteInfoLayout
-      eyebrow="NOSSA COMUNIDADE"
-      title="Louvores que aproximam."
-      intro="Canta Igreja é um espaço para descobrir, ouvir e compartilhar música cristã com outras pessoas."
+    <LayoutInformativo
+      categoria="NOSSA COMUNIDADE"
+      titulo="Louvores que aproximam."
+      descricao="Canta Igreja é um espaço para descobrir, ouvir e compartilhar música cristã com outras pessoas."
     >
       <section>
         <h2>Um lugar para compartilhar música</h2>
@@ -27,6 +27,6 @@ export default function AboutPage() {
         <p>Explore o feed, compartilhe uma música que tenha autorização para publicar ou fale com a equipe pela página de contato.</p>
         <Link className="info-action" href="/">Conhecer o feed</Link>
       </section>
-    </SiteInfoLayout>
+    </LayoutInformativo>
   );
 }

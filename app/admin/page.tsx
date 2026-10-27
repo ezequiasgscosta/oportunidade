@@ -9,7 +9,9 @@ import {
   LogIn,
   LogOut,
   Music2,
+  Pencil,
   Plus,
+  Save,
   ShieldCheck,
   Trash2,
   UserRoundMinus,
@@ -44,6 +46,7 @@ type DashboardStats = {
 type TrackFilter = "pending" | "approved" | "rejected" | "all";
 
 const audioBucket = "music-audio";
+const categories = ["hino da harpa", "hino avulso", "cover"];
 const emptyStats: DashboardStats = {
   total_users: 0,
   total_tracks: 0,
@@ -78,6 +81,11 @@ export default function AdminPage() {
   const [refreshIndex, setRefreshIndex] = useState(0);
   const [filter, setFilter] = useState<TrackFilter>("pending");
   const [activeTrack, setActiveTrack] = useState("");
+  const [editingTrack, setEditingTrack] = useState<Track | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editArtist, setEditArtist] = useState("");
+  const [editCategory, setEditCategory] = useState(categories[0]);
+  const [editLocation, setEditLocation] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [newAdminEmail, setNewAdminEmail] = useState("");
@@ -202,6 +210,46 @@ export default function AdminPage() {
     setActiveTrack("");
   }
 
+  function startEditingTrack(track: Track) {
+    setEditingTrack(track);
+    setEditTitle(track.title);
+    setEditArtist(track.artist);
+    setEditCategory(track.category);
+    setEditLocation(track.location);
+    setError("");
+    setNotice("");
+  }
+
+  async function saveTrackEdits(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!editingTrack) return;
+
+    const title = editTitle.trim();
+    const artist = editArtist.trim();
+    const location = editLocation.trim() || "Desconhecido";
+    if (!title || !artist) {
+      setError("Informe o nome da música e do artista.");
+      return;
+    }
+
+    setActiveTrack(editingTrack.id);
+    setError("");
+    setNotice("");
+    const { error: updateError } = await supabase
+      .from("tracks")
+      .update({ title, artist, category: editCategory, location })
+      .eq("id", editingTrack.id);
+
+    if (updateError) {
+      setError("Não foi possível salvar as alterações da música.");
+    } else {
+      setNotice(`“${title}” foi atualizada.`);
+      setEditingTrack(null);
+      setRefreshIndex((index) => index + 1);
+    }
+    setActiveTrack("");
+  }
+
   async function deleteTrack(track: Track) {
     if (!window.confirm(`Excluir “${track.title}” permanentemente?`)) return;
     setActiveTrack(track.id);
@@ -303,7 +351,7 @@ export default function AdminPage() {
       <header className="topbar">
         <Link className="brand" href="/" aria-label="Onda, voltar ao feed">
           <span className="brand-mark"><Music2 size={20} /></span>
-          <span className="brand-word">Canta <span>Igreja</span></span>
+          <span className="brand-word">Tirando de<span>Ouvido</span></span>
           <span className="brand-caption">ADMINISTRAÇÃO</span>
         </Link>
         <nav className="top-actions" aria-label="Navegação administrativa">
@@ -359,6 +407,7 @@ export default function AdminPage() {
                   <audio controls preload="none" src={audioUrls[track.id]} aria-label={`Ouvir ${track.title}, de ${track.artist}`} />
                   <span className={`admin-track-status status-${track.status}`}>{statusLabel(track.status)}</span>
                   <div className="admin-row-actions">
+                    <button className="edit-track-button" disabled={activeTrack === track.id} onClick={() => startEditingTrack(track)} aria-label={`Editar ${track.title}`} title="Editar música"><Pencil size={15} /> Editar</button>
                     {track.status !== "approved" && <button className="approve-button" disabled={activeTrack === track.id} onClick={() => void updateTrack(track, "approved")}><Check size={15} /> Aprovar</button>}
                     {track.status === "pending" && <button className="reject-button" disabled={activeTrack === track.id} onClick={() => void updateTrack(track, "rejected")}><X size={15} /> Recusar</button>}
                     <button className="delete-button" disabled={activeTrack === track.id} onClick={() => void deleteTrack(track)} aria-label={`Excluir ${track.title}`} title="Excluir música">{activeTrack === track.id ? <LoaderCircle className="spin" size={16} /> : <Trash2 size={16} />}</button>
@@ -394,7 +443,7 @@ export default function AdminPage() {
         </section>
 
         <footer className="page-footer">
-          <Link className="footer-brand" href="/"><Music2 size={15} /> Canta Igreja</Link>
+          <Link className="footer-brand" href="/"><Music2 size={15} /> Tirando de Ouvido</Link>
           <span>Administração da comunidade</span>
           <nav className="legal-footer-links" aria-label="Informações do site">
             <Link href="/sobre">Sobre</Link>
@@ -405,6 +454,28 @@ export default function AdminPage() {
           <span className="footer-live"><span className="live-dot" /> SESSÃO PROTEGIDA</span>
         </footer>
       </div>
+      {editingTrack && (
+        <div className="modal-backdrop">
+          <section className="modal-panel" role="dialog" aria-modal="true" aria-labelledby="edit-track-title">
+            <button className="modal-close" type="button" onClick={() => setEditingTrack(null)} disabled={activeTrack === editingTrack.id} aria-label="Fechar edição"><X size={19} /></button>
+            <p className="modal-kicker">EDIÇÃO DE MÚSICA</p>
+            <h2 id="edit-track-title">Editar música</h2>
+            <p className="modal-copy">Atualize as informações exibidas no feed. O status e o áudio não serão alterados.</p>
+            <form className="modal-form" onSubmit={(event) => void saveTrackEdits(event)}>
+              <label>Nome da música<input required maxLength={120} value={editTitle} onChange={(event) => setEditTitle(event.target.value)} /></label>
+              <label>Nome do artista<input required maxLength={120} value={editArtist} onChange={(event) => setEditArtist(event.target.value)} /></label>
+              <label>Categoria<select value={editCategory} onChange={(event) => setEditCategory(event.target.value)}>{categories.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
+              <label>Local onde foi cantado<input maxLength={120} value={editLocation} onChange={(event) => setEditLocation(event.target.value)} placeholder="Desconhecido" /></label>
+              <div className="edit-track-actions">
+                <button className="quiet-button" type="button" onClick={() => setEditingTrack(null)} disabled={activeTrack === editingTrack.id}>Cancelar</button>
+                <button className="form-submit" type="submit" disabled={activeTrack === editingTrack.id}>
+                  {activeTrack === editingTrack.id ? <><LoaderCircle className="spin" size={16} /> Salvando...</> : <>Salvar alterações <Save size={16} /></>}
+                </button>
+              </div>
+            </form>
+          </section>
+        </div>
+      )}
     </main>
   );
 }

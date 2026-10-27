@@ -39,7 +39,7 @@ type Track = {
 
 const categories = ["hino da harpa", "hino avulso", "cover"];
 const audioBucket = "music-audio";
-const emailConfirmationUrl = "https://cantaigreja.vercel.app/";
+const emailConfirmationUrl = "https://tirandodeouvido.vercel.app/";
 
 function getStatusLabel(status: TrackStatus) {
   if (status === "approved") return "No feed";
@@ -255,7 +255,7 @@ export default function Home() {
       <header className="topbar">
         <a className="brand" href="#feed" aria-label="Onda, início">
           <span className="brand-mark"><AudioLines size={21} strokeWidth={2.4} /></span>
-          <span className="brand-word">Canta <span>Igreja</span></span>
+          <span className="brand-word">tirando d<span>e Ouvido</span></span>
           <span className="brand-caption">FEED DE MÚSICA</span>
         </a>
         <nav className="top-actions" aria-label="Navegação principal">
@@ -291,9 +291,9 @@ export default function Home() {
       <div className="page-content" id="feed">
         <section className="intro-row">
           <div>
-            <div className="eyebrow"><span className="live-dot" /> ESCUTA DA COMUNIDADE</div>
-            <h1>O que está tocando?</h1>
-            <p className="intro-copy">Descubra sons novos, direto de quem faz música.</p>
+            <div className="eyebrow"><span className="live-dot" /> MUSICO DE IGREJA</div>
+            <h1>Bora treinar o ouvido?</h1>
+            <p className="intro-copy">Cantores Reais de igreja para voçê passar sufoco</p>
           </div>
           <div className="intro-stats" aria-label="Resumo do feed">
             <div className="stat-block"><strong>{approvedTracks.length.toString().padStart(2, "0")}</strong><span>no feed</span></div>
@@ -393,9 +393,9 @@ export default function Home() {
         </>
 
         <footer className="page-footer">
-          <a className="footer-brand" href="#feed"><AudioLines size={16} /> Canta Igreja</a>
-          <span>Feito para quem vive de música.</span>
-          <nav className="legal-footer-links" aria-label="Informações do site">
+          <a className="footer-brand" href="#feed"><AudioLines size={16} /> Tirando de Ouvido</a>
+          <span>Feito para quem toca na igreja.</span>
+          <nav className="legal-footer-links grid grid-cols-2 gap-4 text-sm" aria-label="Informações do site">
             <Link href="/sobre">Sobre</Link>
             <Link href="/privacidade">Privacidade</Link>
             <Link href="/termos">Termos</Link>
@@ -427,7 +427,7 @@ export default function Home() {
                   {authMessage && <p className="form-success" role="status">{authMessage}</p>}
                   <button className="form-submit" type="submit">{authMode === "login" ? "Entrar" : "Criar conta"}<LogIn size={17} /></button>
                 </form>
-                <p className="secure-note"><ShieldCheck size={14} /> Acesso protegido pelo Supabase Auth</p>
+                <p className="secure-note"><ShieldCheck size={14} /> Acesso protegido</p>
               </>
             ) : (
               <>

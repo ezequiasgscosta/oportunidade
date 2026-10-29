@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "pt_BR",
     siteName: "Tirando de Ouvido",
-    title: "tirando de ouvido | Louvores da comunidade",
+    title: "tirando de ouvido",
     description: "Ouça e compartilhe hinos da Harpa, hinos avulsos e covers para musicos treinarem seus ouvidos.",
   },
   twitter: { card: "summary" },

@@ -13,7 +13,7 @@ export default function PrivacyPage() {
       titulo="Política de privacidade"
       descricao="Esta página explica quais informações são usadas para operar o Tirando de Ouvido, incluindo cookies, analytics e publicidade."
     >
-      <p className="info-updated">Última atualização: 21 de outubro de 2026</p>
+      <p className="info-updated">Última atualização: 29 de outubro de 2026</p>
       <section>
         <h2>Informações que usamos</h2>
         <p>Ao criar uma conta, usamos seu nome e email para identificar seu perfil e autenticar seu acesso. Quando você envia uma música, armazenamos o título, o nome do artista, a categoria, o arquivo de áudio e o estado da análise.</p>
@@ -38,6 +38,10 @@ export default function PrivacyPage() {
       <section>
         <h2>Visitantes online</h2>
         <p>Para mostrar uma estimativa de visitantes conectados, o site cria um identificador aleatório no armazenamento local do navegador e informa a presença ao Supabase Realtime enquanto a conexão estiver ativa. Esse identificador não contém seu nome ou email; várias abas do mesmo navegador são contadas como um visitante. Você pode removê-lo limpando os dados do site no navegador.</p>
+      </section>
+      <section>
+        <h2>Contagem de visitas</h2>
+        <p>Para exibir estatísticas de audiência no painel administrativo, registramos o identificador aleatório do navegador e a data da visita, uma vez por dia. Os dados são usados para calcular visitantes únicos por dia e no período de 30 dias; não armazenamos páginas visitadas nem vinculamos esse registro ao seu nome ou email. Os registros são mantidos no banco de dados para compor o histórico. Limpar o armazenamento local cria um novo identificador para visitas futuras.</p>
       </section>
     </LayoutInformativo>
   );

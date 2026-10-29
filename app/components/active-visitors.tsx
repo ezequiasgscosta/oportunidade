@@ -47,6 +47,14 @@ export function ActiveVisitorsProvider({ children }: { children: ReactNode }) {
     };
   }, [supabase]);
 
+  useEffect(() => {
+    if (window.location.pathname === "/admin" || window.location.pathname.startsWith("/admin/")) return;
+
+    void supabase.rpc("record_site_visit", { p_visitor_id: getVisitorId() }).then(({ error }) => {
+      if (error) console.error("Não foi possível registrar a visita ao site.", error);
+    });
+  }, [supabase]);
+
   return (
     <ActiveVisitorsContext.Provider value={activeVisitors}>
       {children}

@@ -180,6 +180,29 @@
   animation: appear 400ms ease both;
 }
 
+.admin-visits-section { margin-top: 0; }
+
+.admin-visit-chart { min-height: 210px; padding: 18px 19px 13px; }
+
+.admin-visit-chart-svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+.admin-visit-gridline { stroke: #e8ece5; stroke-dasharray: 3 5; stroke-width: 1; }
+
+.admin-visit-axis-label,
+.admin-visit-date-label {
+  fill: #879087;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 10px;
+}
+
+.admin-visit-date-label { font-size: 9px; }
+
+.admin-visit-bar { fill: #438d73; }
+
+.admin-visit-bar:hover { fill: #276952; }
+
+.admin-visit-chart-note { margin: 8px 0 0; color: #879087; font-size: 10px; line-height: 1.5; }
+
 .admin-section-heading {
   display: flex;
   min-height: 83px;
@@ -528,6 +551,9 @@
 
 @media (max-width: 760px) {
   .admin-stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .admin-visit-chart { padding: 15px 12px 12px; }
+  .admin-visit-chart-svg { min-width: 600px; }
+  .admin-visit-chart { overflow-x: auto; }
   .admin-music-row { grid-template-columns: 38px minmax(120px, 1fr) 68px auto; gap: 9px; padding: 12px 0; }
   .admin-music-row audio { grid-column: 2 / 4; grid-row: 2; width: min(100%, 250px); }
   .admin-music-row .admin-track-status { grid-column: 3; grid-row: 1; }

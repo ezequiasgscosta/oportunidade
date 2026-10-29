@@ -52,6 +52,11 @@ type DashboardStats = {
   pending_tracks: number;
   rejected_tracks: number;
 };
+type SiteVisitStat = {
+  visit_date: string;
+  unique_visitors: number;
+  period_unique_visitors: number;
+};
 type TrackFilter = "pending" | "approved" | "rejected" | "all";
 
 const audioBucket = "music-audio";
@@ -83,6 +88,7 @@ export default function AdminPage() {
   const [authChecking, setAuthChecking] = useState(true);
   const [roleState, setRoleState] = useState<{ userId: string; isAdmin: boolean } | null>(null);
   const [stats, setStats] = useState(emptyStats);
+  const [siteVisits, setSiteVisits] = useState<SiteVisitStat[]>([]);
   const [tracks, setTracks] = useState<Track[]>([]);
   const [admins, setAdmins] = useState<AdminMember[]>([]);
   const [suggestions, setSuggestions] = useState<SiteSuggestion[]>([]);
@@ -113,6 +119,17 @@ export default function AdminPage() {
   const adminDisplayName = typeof profileName === "string" && profileName.trim()
     ? profileName.trim()
     : user?.email;
+  const maxDailyVisitors = Math.max(1, ...siteVisits.map((day) => day.unique_visitors));
+  const periodUniqueVisitors = siteVisits[0]?.period_unique_visitors ?? 0;
+  const visitChartWidth = 900;
+  const visitChartHeight = 220;
+  const chartLeft = 48;
+  const chartRight = 888;
+  const chartTop = 16;
+  const chartBottom = 178;
+  const visitBarWidth = 14;
+  const visitChartStep = (chartRight - chartLeft) / Math.max(siteVisits.length, 1);
+  const visitChartTicks = [...new Set([0, Math.ceil(maxDailyVisitors / 2), maxDailyVisitors])];
 
   useEffect(() => {
     let active = true;
@@ -160,15 +177,16 @@ export default function AdminPage() {
     async function loadDashboard() {
       setLoading(true);
       setError("");
-      const [statsResult, adminsResult, tracksResult, suggestionsResult] = await Promise.all([
+      const [statsResult, adminsResult, tracksResult, suggestionsResult, visitsResult] = await Promise.all([
         supabase.rpc("admin_dashboard_stats"),
         supabase.rpc("admin_list_admins"),
         supabase.from("tracks").select("*").order("created_at", { ascending: false }),
         supabase.from("site_suggestions").select("*").order("created_at", { ascending: false }),
+        supabase.rpc("admin_site_visit_stats"),
       ]);
 
       if (!active) return;
-      if (statsResult.error || adminsResult.error || tracksResult.error || suggestionsResult.error) {
+      if (statsResult.error || adminsResult.error || tracksResult.error || suggestionsResult.error || visitsResult.error) {
         setError("Não foi possível carregar o painel. Aplique as migrations do Supabase e tente novamente.");
         setLoading(false);
         return;
@@ -179,6 +197,7 @@ export default function AdminPage() {
       setAdmins((adminsResult.data ?? []) as AdminMember[]);
       setTracks(nextTracks);
       setSuggestions((suggestionsResult.data ?? []) as SiteSuggestion[]);
+      setSiteVisits((visitsResult.data ?? []) as SiteVisitStat[]);
 
       const urls = await Promise.all(
         nextTracks.map(async (track) => {
@@ -463,6 +482,74 @@ export default function AdminPage() {
           <article className="admin-stat-card stat-online"><span className="admin-stat-icon"><UsersRound size={18} /></span><span className="admin-stat-label">ONLINE AGORA</span><strong>{activeVisitors ?? "—"}</strong><small>visitantes conectados</small></article>
         </section>
         <p className="online-count-note">Estimativa em tempo real: várias abas do mesmo navegador contam como um visitante.</p>
+
+        <section className="admin-panel-section admin-visits-section" aria-labelledby="visits-title">
+          <div className="admin-section-heading">
+            <div><span className="admin-section-index">VISITAS</span><div><h2 id="visits-title">Visitantes únicos</h2><p>Movimento do site nos últimos 30 dias.</p></div></div>
+            <span className="admin-section-count">{periodUniqueVisitors.toLocaleString("pt-BR")} visitantes no período</span>
+          </div>
+          <div className="admin-visit-chart">
+            {loading ? (
+              <div className="loading-state"><LoaderCircle className="spin" size={22} /> Carregando visitas...</div>
+            ) : (
+              <>
+                <svg
+                  className="admin-visit-chart-svg"
+                  viewBox={`0 0 ${visitChartWidth} ${visitChartHeight}`}
+                  role="img"
+                  aria-labelledby="visits-chart-title visits-chart-description"
+                >
+                  <title id="visits-chart-title">Visitantes únicos por dia nos últimos 30 dias</title>
+                  <desc id="visits-chart-description">
+                    O maior número diário no período foi {maxDailyVisitors} visitantes.
+                  </desc>
+                  {visitChartTicks.map((tick) => {
+                    const y = chartBottom - (tick / maxDailyVisitors) * (chartBottom - chartTop);
+                    return (
+                      <g key={tick}>
+                        <line className="admin-visit-gridline" x1={chartLeft} x2={chartRight} y1={y} y2={y} />
+                        <text className="admin-visit-axis-label" x={chartLeft - 10} y={y + 4} textAnchor="end">
+                          {tick}
+                        </text>
+                      </g>
+                    );
+                  })}
+                  {siteVisits.map((day, index) => {
+                    const barHeight = (day.unique_visitors / maxDailyVisitors) * (chartBottom - chartTop);
+                    const x = chartLeft + index * visitChartStep + (visitChartStep - visitBarWidth) / 2;
+                    const dateLabel = new Date(`${day.visit_date}T12:00:00`).toLocaleDateString("pt-BR", {
+                      day: "2-digit",
+                      month: "short",
+                    });
+                    return (
+                      <g key={day.visit_date}>
+                        <rect
+                          className="admin-visit-bar"
+                          x={x}
+                          y={chartBottom - barHeight}
+                          width={visitBarWidth}
+                          height={Math.max(barHeight, 1)}
+                          rx={3}
+                        >
+                          <title>{`${dateLabel}: ${day.unique_visitors} visitantes únicos`}</title>
+                        </rect>
+                        {(index % 7 === 0 || index === siteVisits.length - 1) && (
+                          <text className="admin-visit-date-label" x={x + visitBarWidth / 2} y={visitChartHeight - 8} textAnchor="middle">
+                            {dateLabel}
+                          </text>
+                        )}
+                      </g>
+                    );
+                  })}
+                </svg>
+                <p className="admin-visit-chart-note">
+                  Cada visitante representa um navegador/dispositivo. A mesma pessoa pode contar novamente se usar outro navegador.
+                  Os dados começam a ser coletados após a aplicação da migration.
+                </p>
+              </>
+            )}
+          </div>
+        </section>
 
         <section className="admin-panel-section" aria-labelledby="moderation-title">
           <div className="admin-section-heading">

@@ -364,7 +364,7 @@ export default function Home() {
             <section className="track-section" aria-label="Músicas aprovadas">
               <div className="section-heading">
                 <div className="section-title"><Disc3 size={18} /><h2>Faixas recentes</h2><span>{filteredTracks.length}</span></div>
-                <span className="section-note">Algumas faixas podem demorar para começar  </span>
+                <span className="section-note">Algumas faixas podem demorar para começar.  </span>
               </div>
 
               {feedLoading ? (
